@@ -10,10 +10,10 @@
 namespace base {
 
     [[nodiscard]] auto next_int( ) -> std::int32_t;
-    [[nodiscard]] auto next_int( std::int32_t lowerBound, std::int32_t upperbound, auto& seed ) -> std::int32_t;
+    [[nodiscard]] auto next_int( std::int32_t lowerBound, std::int32_t upperbound) -> std::int32_t;
 
     [[nodiscard]] auto next_real( ) -> double;
-    [[nodiscard]] auto next_real( double lowerBound, double upperbound, auto& seed ) -> double;
+    [[nodiscard]] auto next_real( double lowerBound, double upperbound) -> double;
 }
 
 

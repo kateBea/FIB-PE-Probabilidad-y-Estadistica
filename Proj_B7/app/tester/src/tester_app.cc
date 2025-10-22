@@ -11,7 +11,7 @@
 
 namespace tester {
 
-    auto tester_app::run( const std::int32_t argc, char **argv ) -> std::int32_t {
+    auto tester_app::run( const std::int32_t , char ** ) -> std::int32_t {
         START_SCOPED_TIMER( "tester_run_timer" );
 
         base::println(base::console_color::Blue, "Hello from tester app!");

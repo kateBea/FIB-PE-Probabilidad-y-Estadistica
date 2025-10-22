@@ -8,6 +8,7 @@
 #include <vector>
 #include <ranges>
 #include <utility>
+#include <cstdint>
 #include <unordered_map>
 
 #include <base/logger.hh>
@@ -16,6 +17,11 @@ namespace base {
     template<typename T>
     class gentree {
     public:
+        using value_type = T;
+        using edge_type = std::pair<value_type, value_type>;
+        using vertex_list_type = std::vector<value_type>;
+        using adjacency_list_type = std::unordered_map<T, vertex_list_type>;
+
         gentree() = default;
         ~gentree() = default;
 
@@ -29,8 +35,8 @@ namespace base {
             m_adjacency[from].push_back(to);
         }
 
-        auto vertices() const -> std::vector<T> {
-            std::vector<T> keys{};
+        auto vertices() const -> vertex_list_type {
+            vertex_list_type keys{};
 
             keys.reserve(m_adjacency.size());
             for (auto& key : m_adjacency | std::ranges::views::keys) {
@@ -40,8 +46,8 @@ namespace base {
             return keys;
         }
 
-        auto edges() const -> std::vector<std::pair<T, T>> {
-            std::vector<std::pair<T, T>> result{};
+        auto edges() const -> vertex_list_type {
+            vertex_list_type result{};
 
             for (auto& [from, list] : m_adjacency) {
                 for (auto& to : list) {
@@ -50,6 +56,36 @@ namespace base {
             }
 
             return result;
+        }
+
+        auto node_count() const -> std::size_t {
+            return m_adjacency.size();
+        }
+
+        auto edge_count() const -> std::size_t {
+            std::size_t count{ 0 };
+
+            for (const auto& adjacent_nodes : m_adjacency | std::views::values ) {
+                count += adjacent_nodes.size();
+            }
+
+            return count;
+        }
+
+        auto density() const -> double {
+            if (m_adjacency.empty) {
+                return 0.0;
+            }
+
+            auto v_count{ static_cast<double>(m_adjacency.size()) };
+            auto e_count{ 0.0 };
+
+            for (const auto& edges : m_adjacency | std::views::values ) {
+                e_count += edges.size();
+            }
+
+            // Multiplico por dos porque el grafo es dirigido
+            return static_cast<double>(e_count) * 2 / (v_count * (v_count - 1.0));
         }
 
         auto debug_print() const {
@@ -65,7 +101,7 @@ namespace base {
         }
 
     private:
-        std::unordered_map<T, std::vector<T>> m_adjacency{};
+        adjacency_list_type m_adjacency{};
     };
 }
 

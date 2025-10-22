@@ -1,6 +1,8 @@
 
 #include <fstream>
 #include <sstream>
+#include <cstdint>
+
 #include <tree_loader.hh>
 #include <base/logger.hh>
 
@@ -8,7 +10,7 @@
 namespace tester {
 
     auto tree_loader::load_from_file(const std::filesystem::path uri) -> base::gentree<int> {
-        base::gentree<int> tree{};
+        base::gentree<std::int32_t> tree{};
 
         // Aquí iría la lógica para leer el archivo y cargar los datos en el árbol.
         // Por ahora, simplemente devolvemos un árbol vacío.
@@ -35,8 +37,8 @@ namespace tester {
             reading_edges = line.size() >= 3;
 
             std::istringstream iss{ line };
-            int a{};
-            int b{};
+            std::int32_t a{};
+            std::int32_t b{};
 
             if (!reading_edges) {
                 iss >> a;

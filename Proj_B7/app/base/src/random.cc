@@ -43,7 +43,7 @@ namespace base {
         return next_real( get_seed() );
     }
 
-    auto next_int( std::int32_t lowerBound, std::int32_t upperbound, auto& seed ) -> std::int32_t {
+    static auto next_int( std::int32_t lowerBound, std::int32_t upperbound, auto& seed ) -> std::int32_t {
         if ( lowerBound > upperbound )
             throw std::runtime_error( "Invalid range for random integer generation" );
 
@@ -51,11 +51,19 @@ namespace base {
         return std::uniform_int_distribution{ lowerBound, upperbound }( mt );
     }
 
-    auto next_real( double lowerBound, double upperbound, auto& seed ) -> double {
+    auto next_int( std::int32_t lowerBound, std::int32_t upperbound ) -> std::int32_t {
+        return next_int( lowerBound, upperbound, get_seed() );
+    }
+
+    static auto next_real( double lowerBound, double upperbound, auto& seed ) -> double {
         if ( lowerBound > upperbound )
             throw std::runtime_error( "Invalid range for random real generation" );
 
         thread_local std::mt19937 mt{ seed() };
         return std::uniform_real_distribution{ lowerBound, upperbound }( mt );
+    }
+
+    auto next_real( double lowerBound, double upperbound ) -> double {
+        return next_real( lowerBound, upperbound, get_seed() );
     }
 }
