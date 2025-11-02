@@ -42,7 +42,7 @@ namespace base {
         }
 
         const std::thread::id& tid{ std::this_thread::get_id() };
-        std::uint16_t thread_id{ std::hash<std::thread::id>{}(tid) };
+        std::uint16_t thread_id{ static_cast<std::uint16_t>( std::hash<std::thread::id>{}( tid ) ) };
 
         println("Thread [{}] {}[{}] [{}] {}{}", thread_id, color, timestamp, level_str, message, "\033[0m");
     }
