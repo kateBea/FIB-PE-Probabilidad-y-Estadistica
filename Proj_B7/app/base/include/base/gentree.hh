@@ -10,16 +10,22 @@
 #include <utility>
 #include <cstdint>
 #include <unordered_map>
+#include <unordered_set>
+
+#include <thread>
+#include <mutex>
 
 #include <base/logger.hh>
 namespace base {
+
+    static inline std::mutex g_print_mutex{};
 
     template<typename T>
     class gentree {
     public:
         using value_type = T;
         using edge_type = std::pair<value_type, value_type>;
-        using vertex_list_type = std::vector<value_type>;
+        using vertex_list_type = std::unordered_set<value_type>;
         using adjacency_list_type = std::unordered_map<T, vertex_list_type>;
 
         gentree() = default;
@@ -32,7 +38,17 @@ namespace base {
 
         // Si from no existe se crea primero
         auto add_edge(const T& from, const T& to) -> void {
-            m_adjacency[from].push_back(to);
+            if ( from == to ) {
+                //LOG_WARN("Ignoring self-loop edge from {} to {}", from, to );
+                return;
+            }
+
+            m_adjacency[from].insert(to);
+
+            // Aseguro que el nodo destino también existe
+            if ( !m_adjacency.contains(to)) {
+                m_adjacency[to] = vertex_list_type{};
+            }
         }
 
         auto vertices() const -> vertex_list_type {
@@ -89,6 +105,15 @@ namespace base {
         }
 
         auto debug_print() const {
+            // This uses satd::cout which is not thread safe
+            std::lock_guard lock{ g_print_mutex };
+
+            if ( m_debug_name.empty() ) {
+                print("\nGraph Debug Print:\n");
+            } else {
+                print("\nGraph Debug Print [{}]:\n", m_debug_name );
+            }
+
             for (const auto& [v, edges] : m_adjacency) {
                 print("{} -> ", v);
 
@@ -100,7 +125,31 @@ namespace base {
             }
         }
 
+        auto serialize( std::ostream& os ) const -> void {
+            // Write vertices
+            for (const auto& [v, _] : m_adjacency) {
+                os << v << "\n";
+            }
+
+            // Write edges
+            for (const auto& [from, adjancecy_list] : m_adjacency) {
+                for (const auto& to : adjancecy_list) {
+                    os << from << " " << to << "\n";
+                }
+            }
+        }
+
+        auto set_debug_name( std::string_view name ) -> void {
+            m_debug_name = name;
+        }
+
+        auto get_debug_name() const -> const std::string& {
+            return m_debug_name;
+        }
+
     private:
+        std::string m_debug_name{};
+
         adjacency_list_type m_adjacency{};
     };
 }

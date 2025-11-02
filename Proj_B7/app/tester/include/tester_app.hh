@@ -5,6 +5,8 @@
 #ifndef TESTER_APP_HH
 #define TESTER_APP_HH
 
+#include <taskflow/taskflow.hpp>
+
 #include <base/application.hh>
 
 namespace tester {
@@ -12,6 +14,9 @@ namespace tester {
     class tester_app : public base::application {
     public:
         auto run( const std::int32_t argc, char **argv ) -> std::int32_t override;
+
+    private:
+        tf::Executor m_Executor{};
     };
 }
 

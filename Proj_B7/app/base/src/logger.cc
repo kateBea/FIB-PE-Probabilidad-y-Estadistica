@@ -2,6 +2,9 @@
 // Created by zanet on 10/7/2025.
 //
 
+#include <thread>
+#include <functional> // for std::hash
+
 #include "base/logger.hh"
 
 namespace base {
@@ -15,7 +18,7 @@ namespace base {
         const auto time{ std::chrono::system_clock::to_time_t(now) };
         std::tm local_time{};
 
-    #if defined(_WIN32)
+    #if defined(WIN32)
         localtime_s(&local_time, &time);
     #else
         localtime_r(&time, &local_time);
@@ -38,6 +41,9 @@ namespace base {
             case log_level::critical: level_str = "CRITICAL"; color = "\033[1;31m"; break;
         }
 
-        println("{}[{}] [{}] {}{}", color, timestamp, level_str, message, "\033[0m");
+        const std::thread::id& tid{ std::this_thread::get_id() };
+        std::uint16_t thread_id{ std::hash<std::thread::id>{}(tid) };
+
+        println("Thread [{}] {}[{}] [{}] {}{}", thread_id, color, timestamp, level_str, message, "\033[0m");
     }
 }
