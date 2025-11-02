@@ -1,5 +1,5 @@
 [parameters]
-num_graphs = 5
-min_nodes = 20
-max_nodes = 30
-max_adjacencies_per_node = 10
+num_graphs = 50
+min_nodes = 50
+max_nodes = 70
+max_adjacencies_per_node = 20

@@ -35,10 +35,10 @@ namespace gen {
         config.load(config_path);
 
         // Parameters
-        const std::int32_t num_graphs{ 30 };       // how many graphs to generate
-        const std::int32_t min_nodes{ 20 };        // min nodes per graph
-        const std::int32_t max_nodes{ 30 };       // max nodes per graph
-        const std::int32_t max_adjacencies_per_node{ 10 }; // max adjacencies per node
+        const std::int32_t num_graphs{ config.Get<std::int32_t>( "num_graphs" ) };       // how many graphs to generate
+        const std::int32_t min_nodes{ config.Get<std::int32_t>( "min_nodes" ) };        // min nodes per graph
+        const std::int32_t max_nodes{ config.Get<std::int32_t>( "max_nodes" ) };       // max nodes per graph
+        const std::int32_t max_adjacencies_per_node{ config.Get<std::int32_t>( "max_adjacencies_per_node" ) }; // max adjacencies per node
 
         tf::Taskflow taskflow{};
 
