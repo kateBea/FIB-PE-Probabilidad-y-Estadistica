@@ -13,7 +13,7 @@ namespace base {
 
     class scoped_timer {
     public:
-        explicit scoped_timer(std::string_view name = "");
+        explicit scoped_timer(std::string_view name = "", bool print_on_destruction = false);
         ~scoped_timer();
 
         // Non-copyable
@@ -24,12 +24,19 @@ namespace base {
         scoped_timer(scoped_timer&&) noexcept = default;
         scoped_timer& operator=(scoped_timer&&) noexcept = default;
 
+        // Timer management
+        auto reset() -> void;
+        auto elapsed() const -> double;
+        auto name() const -> std::string_view;
+
+
     private:
         std::string m_name{};
+        bool m_print_on_destruction{};
         std::chrono::high_resolution_clock::time_point m_start{};
     };
 
-#define START_SCOPED_TIMER(name) base::scoped_timer timer##__LINE__{name};
+#define START_SCOPED_TIMER(name) base::scoped_timer timer##__LINE__{name, true};
 
 }
 

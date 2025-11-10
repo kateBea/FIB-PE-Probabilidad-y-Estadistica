@@ -66,28 +66,28 @@ namespace base {
 
     template<typename... Args>
     inline void println(const std::format_string<Args...> fmt, Args&&... args) {
-        std::cout << std::vformat(fmt.get(), std::make_format_args(args...)) << '\n';
+        const std::string result{ std::vformat(fmt.get(), std::make_format_args(args...)) };
+        std::printf("%s\n", result.c_str());
     }
 
     template<typename... Args>
     inline void print(const std::format_string<Args...> fmt, Args&&... args) {
-        std::cout << std::vformat(fmt.get(), std::make_format_args(args...));
+        const std::string result{ std::vformat(fmt.get(), std::make_format_args(args...)) };
+        std::printf("%s", result.c_str());
     }
 
     template<typename... Args>
     inline void print(console_color color, const std::format_string<Args...> fmt, Args&&... args) {
         std::string_view ansi{ get_ansi_color(color) };
-        std::cout << ansi
-            << std::vformat(fmt.get(), std::make_format_args(args...))
-            << "\033[0m"; // Resetear color de la consola
+        const std::string result{ std::vformat(fmt.get(), std::make_format_args(args...)) };
+        std::printf("%s%s\033[0m", ansi.data(), result.c_str());
     }
 
     template<typename... Args>
     inline void println(console_color color, const std::format_string<Args...> fmt, Args&&... args) {
         std::string_view ansi{ get_ansi_color(color) };
-        std::cout << ansi
-            << std::vformat(fmt.get(), std::make_format_args(args...))
-            << "\033[0m" << '\n'; // Resetear color de la consola
+        const std::string result{ std::vformat(fmt.get(), std::make_format_args(args...)) };
+        std::printf("%s%s\033[0m\n", ansi.data(), result.c_str()); // Resetear color de la consola
     }
 
     class logger {

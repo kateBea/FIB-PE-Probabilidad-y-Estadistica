@@ -89,7 +89,7 @@ namespace base {
         }
 
         auto density() const -> double {
-            if (m_adjacency.empty) {
+            if (m_adjacency.empty()) {
                 return 0.0;
             }
 
@@ -100,13 +100,13 @@ namespace base {
                 e_count += edges.size();
             }
 
-            // Multiplico por dos porque el grafo es dirigido
-            return static_cast<double>(e_count) * 2 / (v_count * (v_count - 1.0));
+            // Multiplico por 1 porque el grafo es no dirigido
+            return static_cast<double>(e_count) * 1 / (v_count * (v_count - 1.0));
         }
 
         auto debug_print() const {
             // This uses satd::cout which is not thread safe
-            std::lock_guard lock{ g_print_mutex };
+            //std::lock_guard lock{ g_print_mutex };
 
             if ( m_debug_name.empty() ) {
                 print("\nGraph Debug Print:\n");
@@ -145,6 +145,22 @@ namespace base {
 
         auto get_debug_name() const -> const std::string& {
             return m_debug_name;
+        }
+
+        auto get_graph() const -> const adjacency_list_type& {
+            return m_adjacency;
+        }
+
+        auto get_nodes() const -> vertex_list_type {
+            vertex_list_type keys{};
+
+            keys.reserve(m_adjacency.size());
+
+            for (const auto& key : m_adjacency | std::views::keys) {
+                keys.insert(key);
+            }
+
+            return keys;
         }
 
     private:

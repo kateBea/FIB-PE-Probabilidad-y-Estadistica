@@ -26,6 +26,13 @@ namespace gen {
 
         // Directory to store generated graphs
         std::filesystem::path output_dir{ "./resources" };
+
+        if (std::filesystem::is_directory(output_dir)) {
+            // para las pruebas primero limpiaré el directorio si existe
+            std::filesystem::remove_all(output_dir);
+        }
+    
+
         std::filesystem::create_directories(output_dir);
 
         LOG_INFO("Starting graph generation...");
@@ -56,7 +63,7 @@ namespace gen {
 
                 // Randomly add edges
                 for (std::int32_t u{}; u < num_nodes; ++u) {
-                    std::int32_t num_edges{ base::next_int(1, max_adjacencies_per_node) };
+                    std::int32_t num_edges{ base::next_int(max_adjacencies_per_node * 0.8, max_adjacencies_per_node) };
 
                     for (std::int32_t e{}; e < num_edges; ++e) {
                         std::int32_t to_node_index{ base::next_int(0, num_nodes - 1) };
