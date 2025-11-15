@@ -18,7 +18,7 @@ namespace base {
         const auto time{ std::chrono::system_clock::to_time_t(now) };
         std::tm local_time{};
 
-    #if defined(WIN32)
+    #if defined(_WIN32)
         localtime_s(&local_time, &time);
     #else
         localtime_r(&time, &local_time);
@@ -46,4 +46,5 @@ namespace base {
 
         println("Thread [{}] {}[{}] [{}] {}{}", thread_id, color, timestamp, level_str, message, "\033[0m");
     }
+
 }
