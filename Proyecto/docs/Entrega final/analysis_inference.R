@@ -293,3 +293,29 @@ plot(paired[[nodes_col]], paired$Diff, pch=16, col="purple",
      main="Nodes vs Diff")
 abline(lm(Diff ~ paired[[nodes_col]], data=paired), col="black")
 dev.off()
+
+png("10.5 boxplot_bfs_vs_dfs.png", width = 800, height = 600)
+
+boxplot(
+  paired[[bfs_col]],
+  paired[[dfs_col]],
+  names = c("BFS", "DFS"),
+  col = c("#4C72B0", "#DD8452"),
+  ylab = "Time (ms)",
+  main = "Comparació dels temps d'execució BFS i DFS"
+)
+
+dev.off()
+
+png("10.6 boxplot_diff.png", width = 600, height = 600)
+
+boxplot(
+  paired$Diff,
+  col = "#55A868",
+  ylab = "DFS - BFS (ms)",
+  main = "Distribució de la diferència de temps"
+)
+
+abline(h = 0, col = "red", lwd = 2, lty = 2)
+
+dev.off()
