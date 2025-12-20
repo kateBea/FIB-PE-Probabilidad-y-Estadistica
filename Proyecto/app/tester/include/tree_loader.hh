@@ -12,7 +12,7 @@ namespace tester {
         tree_loader() = default;
         ~tree_loader() = default;
 
-        auto load_from_file(const std::filesystem::path uri) -> base::gentree<int>;
+        static auto load_from_file(const std::filesystem::path uri) -> base::gentree<int>;
     };
 }
 

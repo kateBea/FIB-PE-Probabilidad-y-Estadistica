@@ -58,8 +58,7 @@ namespace tester {
                 LOG_INFO( "Processing graph: {}", path );
 
                 // Me cargo un arbol de disco
-                tree_loader loader{};
-                auto tree{ loader.load_from_file( path ) };
+                auto tree{ tree_loader::load_from_file( path ) };
 
                 tree.set_debug_name( path );
                 tree.debug_print();
@@ -82,12 +81,6 @@ namespace tester {
 
     auto tester_app::run_tests() -> void {
         tf::Taskflow task_graph{};
-
-        // thread concurrency para ejecutar tests en paralel
-        std::int32_t thread_count{ static_cast<std::int32_t>( std::thread::hardware_concurrency() ) };
-        std::int32_t block_size{ static_cast<std::int32_t>( m_graphs.size() / thread_count ) };
-
-        LOG_INFO( "Running tests with {} threads, block size: {} for element count {} (NUMBER OG GRAPHS)", thread_count, block_size, m_graphs.size() );
 
         for ( const auto &[path, current_graph]: m_graphs ) {
 
