@@ -57,7 +57,6 @@ namespace tester {
             task_graph.emplace( [path = graph_path, this]() {
                 LOG_INFO( "Processing graph: {}", path );
 
-                // Me cargo un arbol de disco
                 auto tree{ tree_loader::load_from_file( path ) };
 
                 tree.set_debug_name( path );
